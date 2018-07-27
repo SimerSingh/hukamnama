@@ -9,7 +9,7 @@ import SecondScreen from './hukamnama'
 
 class reactNavigationSample extends Component {
   static navigationOptions = {
-    title: 'Home Screen',
+    title: 'Daily Hukamnama Sahib',
   };
 
   render(){

@@ -35,17 +35,26 @@ const styles = StyleSheet.create({
 
 
 class App extends React.Component {
-
+  
   constructor(props){
     super(props);
+     
     this.state = {
       date:""
     }
   }
 
+fetchHukamnama = (tdate,navigate) => {
+   console.log('going to second screen');
+  navigate('SecondScreen',{date:tdate}); 
+  
+   console.log('going to second screen 2');
+
+
+}
   
 render(){
-const {navigate} = this.props.navigation;
+const {navigate} = this.props.navigation; 
 
 console.log('state is===='+this.state.date);
 
@@ -56,19 +65,12 @@ console.log('state is===='+this.state.date);
        <TouchableOpacity
           style={styles.SubmitButtonStyle}
           activeOpacity = { .5 }
-          onPress={() => navigate('SecondScreen')}
+          onPress={() => navigate('SecondScreen',{date:null})}
        >
 
             <Text style={styles.TextStyle}> Read HUKAMNAMA </Text>            
       </TouchableOpacity>
-      <TouchableOpacity
-          style={styles.SubmitButtonStyle}
-          activeOpacity = { .5 }
-          onPress={() => navigate('SecondScreen')}
-       >
-
-            <Text style={styles.TextStyle}> Search HUKAMNAMA </Text>            
-      </TouchableOpacity>
+     
       
       <DatePicker
         style={{width:200,backgroundColor:'#00BCD4', borderRadius:10,
@@ -101,9 +103,8 @@ console.log('state is===='+this.state.date);
           }
           // ... You can check the source to find the other keys.
         }}
-        onDateChange={(date) => {
-          this.setState({date:date})
-          navigate('SecondScreen',{date:date})
+        onDateChange={(date) => {          
+          this.fetchHukamnama(date,navigate);
         }}        
       />
 

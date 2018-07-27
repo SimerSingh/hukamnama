@@ -13,11 +13,14 @@ import {
 
 export default class AnatomyExample extends Component {
 
-
+static navigationOptions = {
+    title: 'Hukamnama',
+  };
 
 constructor(props){
+
  super(props)
-    this.handleAppStateChange = this.handleAppStateChange.bind(this);    
+     
     
     this.state={
         hukamnamaObj:[],
@@ -33,7 +36,20 @@ constructor(props){
 
 
 componentDidMount(){
-fetch('https://api.gurbaninow.com/v2/hukamnama/today')
+  let hdate = null;
+  let arr = null;
+  let api_url = 'https://api.gurbaninow.com/v2/hukamnama/today';
+
+  if(this.props.navigation){
+      console.log("Param date in hukamnama is ---- :"+this.props.navigation.state.params.date);
+      hdate=this.props.navigation.state.params.date;
+      if(hdate != null){
+        arr = hdate.split("-");
+        api_url='https://api.gurbaninow.com/v2/hukamnama/'+arr[0]+'/'+arr[1]+'/'+arr[2];
+      } 
+    }
+    console.log('calling : '+api_url);
+fetch(api_url)
       .then(response => response.json())
       .then((data) => {
         this.setState({
@@ -43,7 +59,9 @@ fetch('https://api.gurbaninow.com/v2/hukamnama/today')
           loaded: true,
           visible: false,
         })
-      });
+      }).catch(function(err) {
+          console.log(err);
+        });
 
 AppState.addEventListener('change', this.handleAppStateChange);
 }
@@ -52,19 +70,13 @@ AppState.addEventListener('change', this.handleAppStateChange);
  AppState.addEventListener('change', this.handleAppStateChange );
 
 }
-*/
-handleAppStateChange(appState){
-  
-    if(appState === 'background'){
-        alert('back');
-      console.log('app is in bakground') ;
-    }
-}  
+*/  
 
   render() {
-    console.log("Param date in hukamnama is ---- :"+this.props.navigation.state.params.date);
+    
     let english;
     var punjabi='';
+    
     if(this.state.loaded == true){
     // alert('hi');
        english = Object.values(this.state.hukamnamaObj.hukamnama).map((val, index, arr) => {
