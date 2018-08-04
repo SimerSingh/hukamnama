@@ -5,7 +5,6 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 import {
   Platform,
   FlatList,
-  AppState,
   StyleSheet,
   Linking,
   TouchableOpacity
@@ -28,7 +27,7 @@ constructor(props){
         nanakshahi:'',
         loaded:false,
         visible: true,
-        active: true,
+        active: 'false',
         currentTime: 0
     }
 }
@@ -62,39 +61,26 @@ fetch(api_url)
       }).catch(function(err) {
           console.log(err);
         });
-
-AppState.addEventListener('change', this.handleAppStateChange);
-}
-
-/*componentWillUnmount(){
- AppState.addEventListener('change', this.handleAppStateChange );
-
-}
-*/  
+} 
 
   render() {
     
     let english;
     var punjabi='';
+    var whattext = "";
     
     if(this.state.loaded == true){
-    // alert('hi');
-       english = Object.values(this.state.hukamnamaObj.hukamnama).map((val, index, arr) => {
-             return (val.line.gurmukhi.akhar + "\n");
-             //punjabi.concat(val.line.gurmukhi.akhar)
+       punjabi = Object.values(this.state.hukamnamaObj.hukamnama).map((val, index, arr) => {
+             return (val.line.gurmukhi.unicode + "\n");
          })
-       console.log(english);
-       console.log(punjabi); 
+        english = Object.values(this.state.hukamnamaObj.hukamnama).map((val, index, arr) => {
+             return (val.line.translation.english.default + "\n");
+         })
      }
-
-     
-     /*Working code
-     english =Object.values(this.state.hukamnamaObj.hukamnama).map((val, index, arr) => {
-             console.log(arr[index].line.translation.english.default);
-             return arr[index].line.translation.english.default;
-         })*/
-    
-
+    var appText = "\n\nInstall Hukamnama app to read Daily Hukamana\n"+"https://play.google.com/store/apps/details?id=com.simer.hukamnama";
+    var dayDate = this.state.tdate.day +" "+ this.state.tdate.date +" "+ this.state.tdate.month +","+" "+ this.state.tdate.year 
+                      +"\n" + this.state.nanakshahi.day +" "+ this.state.nanakshahi.date +" "+ this.state.nanakshahi.month +","+" "+ this.state.nanakshahi.year;
+     whattext = "Hukamnama\n\n" +dayDate + "\n\n" +punjabi + "\n" + english + appText;
     const loading = <Spinner />;
     const datesv = <Card>
                       <CardItem header>
@@ -110,30 +96,10 @@ AppState.addEventListener('change', this.handleAppStateChange);
     return (
      
       
-      <Container>        
-           <Fab
-            active={this.state.active}
-            direction="down"
-            containerStyle={{ }}
-            style={{ backgroundColor: '#5067FF' }}
-            position="topRight"
-            onPress={() => this.setState({ active: !this.state.active })}>
-            <Icon name="share" />
-            <Button style={{ backgroundColor: '#34A34F' }}>
-              <Icon name="logo-whatsapp" />
-            </Button>
-            <Button style={{ backgroundColor: '#3B5998' }}>
-              <Icon name="logo-facebook" />
-            </Button>
-          </Fab>
-
-          
+      <Container style={{ backgroundColor: 'pink'}}>            
         <Content>
-                
-          
-
         {this.state.visible ? loading : datesv}
-        <Card>
+        <Card transparent>
             <CardItem header>
               <Text>Punjabi</Text>
             </CardItem>
@@ -142,7 +108,7 @@ AppState.addEventListener('change', this.handleAppStateChange);
               
                
                  <View style={{flexDirection:'row', flexWrap:'wrap',paddingLeft: 20}}>      
-                    <Text style={{fontWeight:'bold'}}>{english}</Text>
+                    <Text style={{fontWeight:'bold'}}>{punjabi}</Text>
                  </View>
 
                  
@@ -157,16 +123,24 @@ AppState.addEventListener('change', this.handleAppStateChange);
             <CardItem>
               <Body>
                 
-                  <FlatList
-                        data={this.state.hukamnamaObj.hukamnama}
-                        renderItem={({item}) => (this.renderPersonRowEnglish(item))}
-                        keyExtractor={person => person.line.firstletters.akhar}/> 
-
-                 
+                 <View style={{flexDirection:'row', flexWrap:'wrap',paddingLeft: 20}}>      
+                    <Text style={{fontWeight:'bold'}}>{english}</Text>
+                 </View>                 
               </Body>
             </CardItem>
          </Card>    
-          
+           <Fab
+            active={this.state.active}
+            direction="down"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#5067FF' }}
+            position="topRight"
+            onPress={() => this.setState({ active: !this.state.active })}>
+            <Icon name="share" />
+            <Button onPress={() => Linking.openURL('whatsapp://send?text='+whattext)} style={{ backgroundColor: '#34A34F' }}>
+              <Icon name="logo-whatsapp" />
+            </Button>
+          </Fab>
         </Content>
         
         
@@ -201,6 +175,12 @@ const styles = StyleSheet.create({
     backgroundColor:'#F5FCFF',
     height:24,
  },
+backgroundImage: {
+        flex: 1,
+        width: null,
+        height: null,
+        resizeMode: 'cover'
+},
  headerContainer: {
      flex: 1,
      flexDirection: "row",

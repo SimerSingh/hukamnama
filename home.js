@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-native-datepicker'
 
-import { AppRegistry, StyleSheet, Text, View, TouchableOpacity ,Alert} from 'react-native';
+import { AppRegistry, StyleSheet, Text, View,ImageBackground, TouchableOpacity ,Alert} from 'react-native';
 const styles = StyleSheet.create({
 
   MainContainer: {
@@ -13,21 +13,27 @@ const styles = StyleSheet.create({
 
   SubmitButtonStyle: {
 
-    marginTop:10,
-    paddingTop:15,
-    paddingBottom:15,
-    marginLeft:30,
-    marginRight:30,
-    backgroundColor:'#00BCD4',
-    borderRadius:10,
-    borderWidth: 1,
-    borderColor: '#fff',
-    width:200
+     width: '80%',
+      height: '15%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor:'#7D6CDF', 
+      borderRadius:30,
+      paddingBottom:5,
+      marginLeft: '10%',
+      marginRight: '10%',
+      marginTop: 30,
+      paddingTop:5,
+      borderWidth: 1,
+      borderColor: '#fff',
+      
   },
 
   TextStyle:{
       color:'#fff',
       textAlign:'center',
+      fontSize: 20,
+      fontWeight: 'bold',
   }
 
 });
@@ -54,6 +60,19 @@ fetchHukamnama = (tdate,navigate) => {
 }
   
 render(){
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+
+var yyyy = today.getFullYear();
+if(dd<10){
+    dd='0'+dd;
+} 
+if(mm<10){
+    mm='0'+mm;
+} 
+var today = yyyy+'-'+mm+'/'+dd;
+
 const {navigate} = this.props.navigation; 
 
 console.log('state is===='+this.state.date);
@@ -61,26 +80,29 @@ console.log('state is===='+this.state.date);
   return (
 
      <View style={styles.MainContainer}>
+     <ImageBackground
+     source={require('./gt.jpeg')}
+     style={{width: '100%', height: '100%'}}
+  >
        
        <TouchableOpacity
           style={styles.SubmitButtonStyle}
-          activeOpacity = { .5 }
+          activeOpacity = { .0 }
           onPress={() => navigate('SecondScreen',{date:null})}
        >
 
-            <Text style={styles.TextStyle}> Read HUKAMNAMA </Text>            
+            <Text style={styles.TextStyle}> Today's Hukamnama </Text>            
       </TouchableOpacity>
      
       
       <DatePicker
-        style={{width:200,backgroundColor:'#00BCD4', borderRadius:10,
-        paddingBottom:5,paddingTop:5,borderWidth: 1,marginLeft:30,marginRight:30,marginTop:10,borderColor: '#fff'}}
+        style={styles.SubmitButtonStyle}
         mode="date"
-        placeholder="Search HUKAMNAMA"
+        placeholder="Search Hukamnama"
         androidMode="spinner"
         format="YYYY-MM-DD"
-        minDate="2016-05-01"
-        maxDate="2018-06-01"
+        minDate="2003-01-01"
+        maxDate={today}
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
         customStyles={{
@@ -98,9 +120,10 @@ console.log('state is===='+this.state.date);
                color:'#fff',
               textAlign:'center',
               borderWidth:0,
-              borderColor: '#fff'
-
-          }
+              borderColor: '#fff',
+              fontSize: 20,
+              fontWeight: 'bold'
+           }
           // ... You can check the source to find the other keys.
         }}
         onDateChange={(date) => {          
@@ -108,7 +131,7 @@ console.log('state is===='+this.state.date);
         }}        
       />
 
-
+</ImageBackground>
       </View>
 
       
